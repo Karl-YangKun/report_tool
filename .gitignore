@@ -1,0 +1,7 @@
+__pycache__/*
+database.accdb
+app.log
+build/*
+dist/*
+main.spec
+report.xlsx

@@ -1,0 +1,1234 @@
+{
+  "Private": {
+    "owner":"owner",
+    "db_conf":"database.json",
+    "excel_file":{
+      "file_path":"report.xlsx",
+      "form":["owner","Client","Project","Type","Chip","issue_type","description","solution","state","ADK","blog","start","close"]
+    },
+    "key_map":{
+      "owner":"报告人",
+      "Client":"客户",
+      "Project":"项目",
+      "Type":"产品类型",
+      "Chip":"芯片",
+      "issue_type":"问题类型",
+      "description":"描述",
+      "solution":"解决方法",
+      "state":"状态",
+      "ADK":"版本",
+      "blog":"FAQ&Blog",
+      "OT":"加班时间",
+      "End_Client":"终端客户",
+      "Volume":"预计产量",
+      "MP":"预计量产时间",
+      "Start_Time":"立项时间",
+      "End_Time":"结案时间"
+    },
+    "log_level":20,
+    "version":"version"
+  },
+  "Options":{
+    "ISSUE_TYPE_LIST":[
+      " ",
+      "Topology",
+      "Connection",
+      "Protocol",
+      "OTA DFU",
+      "SW General",
+      "Audio Kymera",
+      "Audio Canability",
+      "Codec",
+      "Quality",
+      "Power Cosumption",
+      "Charger",
+      "Dormant",
+      "Memory",
+      "AIO",
+      "PIO",
+      "Qualification",
+      "Tools",
+      "3rd Party",
+      "Other SW",
+      "Painc",
+      "Flash error",
+      "Production",
+      "Interface"
+    ],
+    "STATE_LIST":["Open","Close","Case:"],
+    "TYPE_LIST":[
+      "Router",
+      "Module",
+      "Dongle",
+      "Mono HS",
+      "Stereo HS",
+      "Speaker",
+      "TWS"],
+    "YEAR_LIST":["2025","2024","2023","2022","2021"],
+    "PROJECT_STATE_LIST":["desiging","design win"]
+
+  },
+
+  "GUI": {
+    "Main":{
+      "Window": {
+        "title": "My Application",
+        "width": 600,
+        "height": 600,
+        "bg_color": "lightblue",
+        "sequence": true
+      },
+      "Widgets": [
+          {
+            "row": 1,
+            "items": [
+              {
+                "type": "Label",
+                "text": "客户：",
+                "place": {
+                  "column": 0,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                }
+              },
+              {
+                "type": "ttk.Combobox",
+                "uid": "Client",
+                "function": {
+                  "f":"self.get_Processor.handler_event_adaptor",
+                  "handler":"self.get_Processor.updateItem",
+                  "params":{
+                    "input":["Client","year(Start_Time)"],
+                    "output":["Project"],
+                    "cmd":"readCustomerProjectsInYear"
+                  }
+                },
+                "init_func":{
+                  "f":"self.get_Processor.exter_db_get",
+                  "param":{
+                    "cmd":"readAllCustomers"
+                  }
+                },
+                "place": {
+                  "column": 1,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                },
+                "attr": {
+                  "state":"readonly",  
+                  "cursor":"arrow",  
+                  "values":" "
+                }
+              },
+              {
+                "type": "Label",
+                "text": "年份",
+                "place": {
+                  "column": 2,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                }
+              },
+              {
+                "type": "ttk.Combobox",
+                "uid": "year(Start_Time)",
+                "function": {
+                  "f":"self.get_Processor.handler_event_adaptor",
+                  "handler":"self.get_Processor.updateItem",
+                  "params":{
+                    "input":["Client","year(Start_Time)"],
+                    "output":["Project"],
+                    "cmd":"readCustomerProjectsInYear"
+                  }
+                },
+                "place": {
+                  "column": 3,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                },
+                "attr": {
+                  "state":"readonly",  
+                  "cursor":"arrow",  
+                  "values":"YEAR_LIST"
+                }
+              }
+            ]
+          },
+          {
+            "row": 2,
+            "items": [
+              {
+                "type": "Label",
+                "text": "项目：",
+                "place": {
+                  "column": 0,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                }
+              },
+              {
+                "type": "ttk.Combobox",
+                "uid": "Project",
+                "function": {
+                  "f":"self.get_Processor.handler_event_adaptor",
+                  "handler":"self.get_Processor.updateItem",
+                  "params":{
+                    "input":["Client","Project"],
+                    "output":["ID"],
+                    "unmodifiable_output":["ID"],
+                    "cmd":"readIdByProject"
+                  }
+                },
+                "place": {
+                  "column": 1,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                },
+                "attr": {
+                  "state":"readonly",  
+                  "cursor":"arrow",  
+                  "values":" "
+                }
+              },
+              {
+                "type": "Label",
+                "text": "ID：",
+                "place": {
+                  "column": 2,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                }
+              },
+              {
+                "type": "Entry",
+                "uid": "ID",
+                "alias":"project_id",
+                "place": {
+                  "column": 3,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                },
+                "attr": {
+                  "state":"disabled"
+                }
+              }
+            ]
+          },
+          {
+            "row": 3,
+            "items": [
+              {
+                "type": "Label",
+                "text": "问题类型：",
+                "place": {
+                  "column": 0,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                }
+              },
+              {
+                "type": "ttk.Combobox",
+                "uid": "issue_type",
+                "place": {
+                  "column": 1,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                },
+                "attr": {
+                  "state":"readonly",  
+                  "cursor":"arrow",  
+                  "values":"ISSUE_TYPE_LIST"
+                }
+              }
+            ]
+          },
+          {
+            "row": 4,
+            "items": [
+              {
+                "type": "Label",
+                "text": "问题描述：",
+                "place": {
+                  "column": 0,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                }
+              },
+              {
+                "type": "Entry",
+                "uid": "description",
+                "place": {
+                  "column": 1,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 4,
+                  "rowspan": 1
+                }
+              }
+            ]
+          },
+          {
+            "row": 5,
+            "items": [
+              {
+                "type": "Label",
+                "text": "解决方案：",
+                "place": {
+                  "column": 0,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                }
+              },
+              {
+                "type": "Entry",
+                "uid": "solution",
+                "place": {
+                  "column": 1,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 4,
+                  "rowspan": 1
+                }
+              }
+            ]
+          },
+          {
+            "row": 6,
+            "items": [
+              {
+                "type": "Label",
+                "text": "状态：",
+                "place": {
+                  "column": 0,
+                  "padx":5,
+                  "pady":5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                }
+              },
+              {
+                "type": "ttk.Combobox",
+                "uid": "state",
+                "place": {
+                  "column": 1,
+                  "padx":5,
+                  "pady":5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                },
+                "attr": {
+                  "state":"normal",  
+                  "cursor":"arrow",  
+                  "values":"STATE_LIST"
+                }
+              }
+            ]
+          },
+          {
+            "row": 7,
+            "items": [
+              {
+                "type": "Label",
+                "text": "博文&FAQ",
+                "place": {
+                  "column": 0,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                }
+              },
+              {
+                "type": "Entry",
+                "uid": "blog",
+                "place": {
+                  "column": 1,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 4,
+                  "rowspan": 1
+                }
+              }
+            ]
+          },
+          {
+            "row": 8,
+            "items": [
+              {
+                "type": "Button",
+                "text": "新建报告",
+                "function": {
+                  "f":"self.get_Processor.out_log",
+                  "params":{
+                    "input":["owner","project_id","issue_type","description","solution","blog","state"],
+                    "output":["outlog"],
+                    "cmd":"writeReportInfo"
+                  }
+                },
+                "place": {
+                  "column": 0,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                }
+              },
+              {
+                "type": "Button",
+                "text": "查询该项目近一周报告",
+                "function": {
+                "f":"self.get_Processor.out_log",
+                "params":{
+                  "input":["Client","Project"],
+                  "output":["outlog"],
+                  "cmd":"readRecentReportByProject"
+                  }
+                },
+                "place": {
+                  "column": 1,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                }
+              }
+            ]
+          },
+          {
+            "row":9,
+            "items": [
+              {
+                "type": "Label",
+                "text": "报告功能区：",
+                "place": {
+                  "column": 0,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                }
+              },
+              {
+                "type": "Button",
+                "text": "更新报告",
+                "function": {
+                  "f":"self.get_myself.new_panel",
+                  "params":{
+                    "window":"UpdateReportPanel"
+                  }
+                },
+                "place": {
+                  "column": 1,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                }
+              },
+              {
+                "type": "Button",
+                "text": "导出报告",
+                "function": {
+                  "f":"self.get_Processor.export_to_excel",
+                  "params":{
+                    "input":[],
+                    "output":["outlog"],
+                    "cmd":"readRecentUpdatedReport"
+                  }
+                },
+                "place": {
+                  "column": 2,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                }
+              }
+            ]
+          },
+          {
+            "row":10,
+            "items": [
+              {
+                "type": "Label",
+                "text": "项目功能区：",
+                "place": {
+                  "column": 0,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                }
+              },
+              {
+                "type": "Button",
+                "text": "项目数据总结",
+                "function": {
+                  "f":"self.get_myself.new_panel",
+                  "params":{
+                    "window":"ProjectSummaryPannel"
+                  }
+                },
+                "place": {
+                  "column": 1,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                }
+              },
+              {
+                "type": "Button",
+                "text": "项目管理",
+                "function": {
+                  "f":"self.get_myself.new_panel",
+                  "params":{
+                    "window":"ProjectManagePanel"
+                  }
+                },
+                "place": {
+                  "column": 2,
+                  "padx": 5,
+                  "pady": 5,
+                  "sticky": "we",
+                  "columnspan": 1,
+                  "rowspan": 1
+                }
+              }
+            ]
+          },
+          {
+            "row": 11,
+            "items": [
+              {
+                "type": "Text",
+                "uid":"outlog",
+                "place": {
+                  "column": 0,
+                  "padx": 10,
+                  "pady": 10,
+                  "columnspan": 5,
+                  "rowspan": 1
+                },
+                "attr": {
+                  "width":80,
+                  "height":20
+                }
+              }
+            ]
+          }
+      ]
+    },
+    
+    "UpdateReportPanel":{
+      "Window": {
+        "title": "更新报告",
+        "width": 1400,
+        "height": 600,
+        "bg_color": "lightblue",
+        "sequence": true
+      },
+      "Widgets":[
+        {
+          "row": 0,
+          "items": [
+            {
+              "type": "Button",
+              "text": "获取本周问题",
+              "function": {
+                "f":"self.get_Processor.revisable_data",
+                "params":{
+                  "cmd":"readWeeklyOpenReport"
+                }
+              },
+              "place": {
+                "column": 0,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            },
+            {
+              "type": "Button",
+              "text": "获取未解之谜",
+              "function": {
+              "f":"self.get_Processor.revisable_data",
+              "params":{
+                "cmd":"readAllOpenReport"
+                }
+              },
+              "place": {
+                "column": 1,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+
+    "ProjectManagePanel":{
+      "Window": {
+        "title": "项目管理",
+        "width": 600,
+        "height": 600,
+        "bg_color": "lightblue",
+        "sequence": true
+      },
+      "Widgets":[
+        {
+          "row": 0,
+          "items": [
+            {
+              "type": "Label",
+              "text": "客户：",
+              "place": {
+                "column": 0,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            },
+            {
+              "type": "ttk.Combobox",
+              "uid": "Client",
+              "function": {
+                "f":"self.get_Processor.handler_event_adaptor",
+                "handler":"self.get_Processor.updateItem",
+                "params":{
+                  "input":["Client","year(Start_Time)"],
+                  "output":["Project"],
+                  "cmd":"readCustomerProjectsInYear"
+                }
+              },
+              "init_func":{
+                "f":"self.get_Processor.exter_db_get",
+                "param":{
+                  "cmd":"readAllCustomers"
+                }
+              },
+              "place": {
+                "column": 1,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              },
+              "attr": {
+                "state":"normal",  
+                "cursor":"arrow",  
+                "values":" "
+              }
+            },
+            {
+              "type": "Label",
+              "text": "年份",
+              "place": {
+                "column": 2,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            },
+            {
+              "type": "ttk.Combobox",
+              "uid": "Start_Time",
+              "alias":"year(Start_Time)",
+              "function": {
+                "f":"self.get_Processor.handler_event_adaptor",
+                "handler":"self.get_Processor.updateItem",
+                "params":{
+                  "input":["Client","year(Start_Time)"],
+                  "output":["Project"],
+                  "cmd":"readCustomerProjectsInYear"
+                }
+              },
+              "place": {
+                "column": 3,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              },
+              "attr": {
+                "state":"readonly",  
+                "cursor":"arrow",  
+                "values":"YEAR_LIST"
+              }
+            }
+          ]
+        },
+        {
+          "row": 1,
+          "items": [
+            {
+              "type": "Label",
+              "text": "项目名：",
+              "place": {
+                "column": 0,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            },
+            {
+              "type": "ttk.Combobox",
+              "uid": "Project",
+              "function": {
+                "f":"self.get_Processor.handler_event_adaptor",
+                "handler":"self.get_Processor.updateItem",
+                "params":{
+                  "input":["Client","Project"],
+                  "output":["End_Client","ADK","Volume","MP","Type","Chip","outlog"],
+                  "cmd":"readCustomerProjectInfo"
+                }
+              },
+              "place": {
+                "column": 1,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              },
+              "attr": {
+                "state":"normal",  
+                "cursor":"arrow",  
+                "values":" "
+              }
+            },
+            {
+              "type": "Label",
+              "text": "终端客户：",
+              "place": {
+                "column": 2,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            },
+            {
+              "type": "Entry",
+              "uid": "End_Client",
+              "place": {
+                "column": 3,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "items": [
+            {
+              "type": "Label",
+              "text": "芯片系列：",
+              "place": {
+                "column": 0,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            },
+            {
+              "type": "ttk.Combobox",
+              "uid": "Platform",
+              "function": {
+                "f":"self.get_Processor.handler_event_adaptor",
+                "handler":"self.get_Processor.updateItem",
+                "params":{
+                  "input":["Platform"],
+                  "output":["Chip"],
+                  "cmd":"readAllPlatformChip"
+                }
+              },
+              "init_func":{
+                "f":"self.get_Processor.exter_db_get",
+                "param":{
+                  "cmd":"readAllPlatform"
+                }
+              },
+              "place": {
+                "column": 1,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              },
+              "attr": {
+                "state":"readonly",  
+                "cursor":"arrow",  
+                "values":" "
+              }
+            },
+            {
+              "type": "Label",
+              "text": "芯片：",
+              "place": {
+                "column": 2,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            },
+            {
+              "type": "ttk.Combobox",
+              "uid": "Chip",
+              "place": {
+                "column": 3,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              },
+              "attr": {
+                "state":"readonly",  
+                "cursor":"arrow",  
+                "values":" "
+              }
+            }
+          ]
+        },
+        {
+          "row": 3,
+          "items": [
+            {
+              "type": "Label",
+              "text": "ADK版本：",
+              "place": {
+                "column": 0,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            },
+            {
+              "type": "Entry",
+              "uid": "ADK",
+              "place": {
+                "column": 1,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            }
+          ]
+        },
+        {
+          "row": 4,
+          "items": [
+            {
+              "type": "Label",
+              "text": "预计产量",
+              "place": {
+                "column": 0,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            },
+            {
+              "type": "Entry",
+              "uid": "Volume",
+              "place": {
+                "column": 1,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            },
+            {
+              "type": "Label",
+              "text": "预计量产时间：",
+              "place": {
+                "column": 2,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            },
+            {
+              "type": "Entry",
+              "uid": "MP",
+              "place": {
+                "column": 3,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            }
+          ]
+        },
+        {
+          "row": 5,
+          "items": [
+            {
+              "type": "Label",
+              "text": "产品类型：",
+              "place": {
+                "column": 0,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            },
+            {
+              "type": "ttk.Combobox",
+              "uid": "Type",
+              "place": {
+                "column": 1,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              },
+              "attr": {
+                "state":"readonly",  
+                "cursor":"arrow",  
+                "values":"TYPE_LIST"
+              }
+            }
+          ]
+        },
+        {
+          "row": 8,
+          "items": [
+            {
+              "type": "Button",
+              "text": "立项",
+              "function": {
+                "f":"self.get_Processor.out_log",
+                "params":{
+                  "input":["Client","Project","End_Client","Type","Chip","Volume","ADK","MP"],
+                  "output":["outlog"],
+                  "cmd":"writeNewProjectInfo",
+                  "refresh_entry":"Client"
+                }
+              },
+              "place": {
+                "column": 0,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            },
+            {
+              "type": "Button",
+              "text": "更新",
+              "function": {
+                "f":"self.get_Processor.out_log",
+                "params":{
+                  "input":["Client","Project","End_Client","Chip","Volume","ADK","MP","Type"],
+                  "output":["outlog"],
+                  "cmd":"updateProjectInfo",
+                  "refresh_entry":"Project"
+                }
+              },
+              "place": {
+                "column": 1,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            },
+            {
+              "type": "Button",
+              "text": "删除",
+              "function": {
+                "f":"self.get_Processor.out_log",
+                "params":{
+                  "input":["Client","Project"],
+                  "output":["outlog"],
+                  "cmd":"deleteProjectInfo",
+                  "refresh_entry":"Client"
+                }
+              },
+              "place": {
+                "column": 2,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            },
+            {
+              "type": "Button",
+              "text": "结案",
+              "function": {
+                "f":"self.get_Processor.out_log",
+                "params":{
+                  "input":["Client","Project"],
+                  "output":["outlog"],
+                  "cmd":"finishProject",
+                  "refresh_entry":"Project"
+                }
+              },
+              "place": {
+                "column": 3,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            }
+          ]
+        },
+        {
+          "row": 11,
+          "items": [
+            {
+              "type": "Text",
+              "uid":"outlog",
+              "place": {
+                "column": 0,
+                "padx": 10,
+                "pady": 10,
+                "columnspan": 5,
+                "rowspan": 1
+              },
+              "attr": {
+                "width":80,
+                "height":20
+              }
+            }
+          ]
+        }
+      ]
+    },
+
+    "ProjectSummaryPannel":{
+      "Window": {
+        "title": "项目数据总结",
+        "width": 600,
+        "height": 600,
+        "bg_color": "lightblue",
+        "sequence": true
+      },
+      "Widgets":[
+        {
+          "row": 0,
+          "items": [
+            {
+              "type": "Label",
+              "text": "年份: ",
+              "place": {
+                "column": 0,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            },
+            {
+              "type": "ttk.Combobox",
+              "uid": "year(Start_Time)",
+              "alias":"year(End_Time)",
+              "place": {
+                "column": 1,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              },
+              "attr": {
+                "state":"readonly",  
+                "cursor":"arrow",  
+                "values":"YEAR_LIST"
+              }
+            }
+          ]
+        },
+        {
+          "row": 8,
+          "items": [
+            {
+              "type": "Button",
+              "text": "Disign In",
+              "function": {
+                "f":"self.get_Processor.out_log",
+                "params":{
+                  "input":["year(Start_Time)"],
+                  "output":["outlog"],
+                  "output_group":"Client",
+                  "cmd":"readReadAllProjectDesignInByYear"
+                }
+              },
+              "place": {
+                "column": 0,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            },
+            {
+              "type": "Button",
+              "text": "Disign Win",
+              "function": {
+                "f":"self.get_Processor.out_log",
+                "params":{
+                  "input":["year(End_Time)"],
+                  "output":["outlog"],
+                  "output_group":"Client",
+                  "cmd":"readReadAllProjectDesignWinByYear"
+                }
+              },
+              "place": {
+                "column": 1,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            },
+            {
+              "type": "Button",
+              "text": "Disigning",
+              "function": {
+                "f":"self.get_Processor.out_log",
+                "params":{
+                  "input":[],
+                  "output":["outlog"],
+                  "output_group":"Client",
+                  "cmd":"readReadAllProjectDesigningByYear"
+                }
+              },
+              "place": {
+                "column": 2,
+                "padx": 5,
+                "pady": 5,
+                "sticky": "we",
+                "columnspan": 1,
+                "rowspan": 1
+              }
+            }
+          ]
+        },
+        {
+          "row": 11,
+          "items": [
+            {
+              "type": "Text",
+              "uid":"outlog",
+              "place": {
+                "column": 0,
+                "padx": 10,
+                "pady": 10,
+                "columnspan": 5,
+                "rowspan": 1
+              },
+              "attr": {
+                "width":80,
+                "height":20
+              }
+            }
+          ]
+        }
+      ]
+    },
+
+    "Layout": {
+        "orientation": "grid"
+    }
+  }
+}
